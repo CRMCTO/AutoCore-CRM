@@ -13,26 +13,27 @@ import {
   Menu,
   X,
   LogOut,
-  ChevronDown
 } from 'lucide-react'
 import { toggleSidebar } from '../store/slices/uiSlice'
 import { logout } from '../store/slices/authSlice'
+import { useTranslate } from '../hooks/useTranslate'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const { sidebarOpen } = useSelector(state => state.ui)
   const location = useLocation()
+  const t = useTranslate()
   const [expandedMenu, setExpandedMenu] = useState(null)
 
   const menuItems = [
-    { icon: BarChart3, label: 'Dashboard', path: '/', exact: true },
-    { icon: Users, label: 'Клиенты', path: '/customers' },
-    { icon: Car, label: 'Автомобили', path: '/vehicles' },
-    { icon: ClipboardList, label: 'Заказы', path: '/orders' },
-    { icon: Wrench, label: 'Услуги', path: '/services' },
-    { icon: Calendar, label: 'Сотрудники', path: '/employees' },
-    { icon: DollarSign, label: 'Платежи', path: '/payments' },
-    { icon: BarChart3, label: 'Отчеты', path: '/reports' },
+    { icon: BarChart3, label: t('sidebar.dashboard'), path: '/', exact: true },
+    { icon: Users, label: t('sidebar.customers'), path: '/customers' },
+    { icon: Car, label: t('sidebar.vehicles'), path: '/vehicles' },
+    { icon: ClipboardList, label: t('sidebar.orders'), path: '/orders' },
+    { icon: Wrench, label: t('sidebar.services'), path: '/services' },
+    { icon: Calendar, label: t('sidebar.employees'), path: '/employees' },
+    { icon: DollarSign, label: t('sidebar.payments'), path: '/payments' },
+    { icon: BarChart3, label: t('sidebar.reports'), path: '/reports' },
   ]
 
   const isActive = (path, exact = false) => {
@@ -103,14 +104,14 @@ const Sidebar = () => {
               className="flex items-center gap-4 px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded transition-colors"
             >
               <Settings size={20} />
-              <span className={sidebarOpen ? '' : 'hidden'}>Настройки</span>
+              <span className={sidebarOpen ? '' : 'hidden'}>{t('sidebar.settings')}</span>
             </Link>
             <button
               onClick={() => dispatch(logout())}
               className="w-full flex items-center gap-4 px-6 py-3 text-slate-400 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors"
             >
               <LogOut size={20} />
-              <span className={sidebarOpen ? '' : 'hidden'}>Выход</span>
+              <span className={sidebarOpen ? '' : 'hidden'}>{t('sidebar.logout')}</span>
             </button>
           </div>
         </div>

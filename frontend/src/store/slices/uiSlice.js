@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  sidebarOpen: true,
+  language: localStorage.getItem('language') || 'uk', // uk or ru
   darkMode: localStorage.getItem('darkMode') === 'true' || false,
+  sidebarOpen: true,
   notifications: [],
 }
 
@@ -16,6 +17,10 @@ const uiSlice = createSlice({
     toggleDarkMode: (state) => {
       state.darkMode = !state.darkMode
       localStorage.setItem('darkMode', state.darkMode)
+    },
+    setLanguage: (state, action) => {
+      state.language = action.payload
+      localStorage.setItem('language', action.payload)
     },
     addNotification: (state, action) => {
       state.notifications.push({
@@ -34,6 +39,7 @@ const uiSlice = createSlice({
 export const {
   toggleSidebar,
   toggleDarkMode,
+  setLanguage,
   addNotification,
   removeNotification,
 } = uiSlice.actions
