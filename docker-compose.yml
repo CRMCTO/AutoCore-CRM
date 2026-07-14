@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: autocore-postgres
+    environment:
+      POSTGRES_USER: autocore
+      POSTGRES_PASSWORD: autocore_dev_pass
+      POSTGRES_DB: autocore_crm
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - autocore-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autocore-backend
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://autocore:autocore_dev_pass@postgres:5432/autocore_crm
+      JWT_SECRET: your_jwt_secret_key_here
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - autocore-network
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: autocore-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:5000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - autocore-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+
+networks:
+  autocore-network:
+    driver: bridge
